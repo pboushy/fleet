@@ -423,6 +423,8 @@ spec:
             {{- if .Values.fleet.tls.enabled }}
             scheme: HTTPS
             {{- end }}
+          periodSeconds: {{ .Values.fleet.livenessProbe.periodSeconds | default 10 }}
+          failureThreshold: {{ .Values.fleet.livenessProbe.failureThreshold | default 3}}
         readinessProbe:
           httpGet:
             path: /healthz
@@ -430,6 +432,8 @@ spec:
             {{- if .Values.fleet.tls.enabled }}
             scheme: HTTPS
             {{- end }}
+            periodSeconds: {{ .Values.fleet.readinessProbe.periodSeconds | default 10 }}
+            failureThreshold: {{ .Values.fleet.readinessProbe.failureThreshold | default 3}}
         {{- if or (.Values.fleet.tls.enabled) (.Values.database.tls.enabled) (eq .Values.osquery.logging.statusPlugin "filesystem") (eq .Values.osquery.logging.resultPlugin "filesystem") }}
         volumeMounts:
           - name: tmp
